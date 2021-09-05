@@ -10,6 +10,7 @@
 #define ROWS ROW+2
 #define COLS COL+2
 #define SNUM ROW*COL-NUM
+//判断是否获胜的函数，当旗帜标出所有地雷获胜，或者是所有没有地雷的格子都已显示
 int isWin(char arrb[ROWS][COLS],char arrf[ROWS][COLS])
 {
         int count=0;
@@ -39,6 +40,7 @@ int isWin(char arrb[ROWS][COLS],char arrf[ROWS][COLS])
                 return 1;
         return 0;
 }
+//检查此格周围的地雷数并返回
 int checkMine(int row,int col,char arrb[ROWS][COLS])
 {
         int count=0;
@@ -52,7 +54,7 @@ int checkMine(int row,int col,char arrb[ROWS][COLS])
         }
         return count;
 }
-
+//初始化arrb的函数，即生成地雷的位置，最外面一圈为'F'
 void initb(char arrb[ROWS][COLS])
 {
 	int count=0;
@@ -85,6 +87,7 @@ void initb(char arrb[ROWS][COLS])
                 arrb[n][10]='F';
         }
 }
+//初始化arrf的函数，将arrf最外面一圈为'F',中间为' '
 void initf(char arrf[ROWS][COLS])
 {
         for(int i=0;i<ROWS;i++)
@@ -103,6 +106,7 @@ void initf(char arrf[ROWS][COLS])
         }
 
 }
+//刷新棋盘，显示flag数量
 void fresh(char arrf[ROWS][COLS],int flag)
 {
 	printf("Flag:%d\n",flag);
@@ -150,6 +154,7 @@ void fresh(char arrf[ROWS][COLS],int flag)
 	printf("\n\n");
 
 }
+//check函数检测周围有多少地雷，如果没有则显示为0并且扩散检测上下左右是否也为0
 int check(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int row,int col)
 {
 
@@ -178,6 +183,7 @@ int check(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int row,int col)
         else
                 return 0;
 }
+//玩家行动函数，三种行动，扫雷，插旗，拔旗
 int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
 {
         int input,row,col =0;
@@ -187,6 +193,7 @@ int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
         scanf("%d",&input);
         switch(input)
         {
+		//扫雷时，如果选择位置超出范围或者已经插旗则提示并且重新进行开始回合
                 case 1:
                         printf("请选择你下一步行动的位置(行，列):");
                         scanf("%d",&row);
@@ -199,7 +206,7 @@ int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
                                 return player_round(arrf,arrb,&(*flag));
                                 break;
                         }
-
+			//如果踩到雷，则在此格显示*并且返回0表示游戏失败
                         if(arrb[row][col]=='1')
                         {
 				arrf[row][col]='*';
@@ -207,6 +214,8 @@ int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
                         }
                         else
                         {
+				//行动后检测周围有无地雷，检测完毕后判断是否获胜
+				//获胜则返回1
                                 check(arrf,arrb,row,col);
                                 if(isWin(arrb,arrf)==1)
                                 {
@@ -216,6 +225,7 @@ int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
 			return 3;
                         break;
                 case 2:
+			//插旗时首先判断是否还有旗
 			if(*flag==0)
 			{
 				printf("你的旗子数已用完！请取消插旗！");
@@ -225,6 +235,7 @@ int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
                         printf("请选择你下一步行动的位置(行，列):");
 			scanf("%d",&row);
                         scanf("%d",&col);
+			//然后判断是否超出范围或者此位置为已经显示的位置
                         if(((row<1)||(row>ROW+1))
                         ||((col<1)||(col>COL+1))
 			||(arrf[row][col]!=' '))
@@ -267,15 +278,20 @@ int player_round(char arrf[ROWS][COLS],char arrb[ROWS][COLS],int* flag)
         }
 }
 
-                                                                     
+//游戏主体                                                                     
 void game()
 {
+	//创建arrf前景版，arrb背景板
 	char arrf[ROWS][COLS];
 	char arrb[ROWS][COLS];
+	//初始化arrf与arrb
 	initb(arrb);
 	initf(arrf);
 	int flag =NUM;
+	//显示初始棋盘
         fresh(arrf,flag);
+	//开始游戏，返回1则胜利，返回0则失败
+	//胜利或失败后展示地雷位置
         while(1)
         {
                 int e=3;
@@ -299,7 +315,7 @@ void game()
         }
 
 }
-
+//游戏选择菜单
 int menu()
 {
 
