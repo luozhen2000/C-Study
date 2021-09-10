@@ -1,5 +1,7 @@
 #This is a C studing record of Ashen&&
 
+#代码总行数:1903
+
 #algorithm --算法相关的学习记录
 
 #test --杂七杂八的东西
