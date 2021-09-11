@@ -138,9 +138,37 @@ int main()
 	//而-4 补码为11111111111111111111111111111100 %p强制输出为16进制就为0xfffffffc
 	//而64位系统&后是long int 类型 所以%p为0xfffffffffffffffc
 	*/
+	
+	/*
+	int aa[2][5]={1,2,3,4,5,6,7,8,9,10};
+	int *p1=(int *)(&aa+1);
+	int *p2=(int *)(*(aa+1));
+
+	printf("%d,%d\n",*(p1-1),*(p2-1));//10,5
+	*/
+
+
+	/*
+	char *a[]={"work","in","China"};//a[]存储的是char* 也就是指向一个char的指针，也就是三个string的首字符。
+	char **pa=a;
+
+	pa++;//所以pa++时，就从第一个string的首字符跳到了第二个string的首字符。
+	printf("%s\n",*pa);
+	*/
 
 
 
+	//********************重点
+	char *c[]={"ENTER","NEW","POINT","FIRST"};
+	char**cp[]={c+3,c+2,c+1,c};
+	char***cpp=cp;
+
+	printf("%s\n",**++cpp);//POINT
+	printf("%s\n",*--*++cpp + 3);//ER
+	printf("%s\n",*cpp[-2] + 3);//ST
+	printf("%s\n",cpp[-1][-1] + 1);//EW
+
+	printf("%s\n",*cp[2]);
 
 	return 0;
 }
