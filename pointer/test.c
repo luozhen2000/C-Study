@@ -6,8 +6,8 @@ int main()
 	int* pa = &a;
 	int** ppa = &pa;
 	int*** pppa = &ppa;
+
 	
-
-
 	return 0;
 }
+
