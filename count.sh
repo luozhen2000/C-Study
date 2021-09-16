@@ -1,6 +1,6 @@
 #!/bin/bash
 
-extens=(".c" ".cpp" ".h" ".hpp")
+extens=(".c" ".h")
 filesCount=0
 linesCount=0
 function funCount()
