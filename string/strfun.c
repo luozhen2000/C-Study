@@ -98,7 +98,7 @@ int main()
 	//char* strtok(char* str,const char* sep);
 	//将sep作为分隔符，
 	char* str1="192.168.10.1";
-	char* sep="...";
+	char* sep=".";
 	printf("%s\n",strtok(str1,sep));
 
 
