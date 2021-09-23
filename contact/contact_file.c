@@ -39,8 +39,7 @@ void init(contact* con)
 	con->size=0;
 	con->capasity=3;
 }
-
-void addData(contact* con)
+void checkCapasity(contact* con)
 {
 	if(con->size==con->capasity)
 	{
@@ -57,6 +56,10 @@ void addData(contact* con)
 			return;
 		}
 	}
+}
+void addData(contact* con)
+{
+	checkCapasity(con);
 	printf("姓名:");
 	scanf("%s",con->data[con->size].name);
 	printf("\n");
@@ -86,6 +89,7 @@ void showAll(const contact* p)
 	if(p->size==0)
 	{
 		printf("通讯录为空\n");
+		return;
 	}
 	printf("%-10s \t%-5s \t%-20s \t%-15s \t%-4s \t%-15s \n","姓名","性别","住址","QQ","年龄","电话");
 	for(int i=0;i<p->size;i++)
@@ -195,12 +199,57 @@ void change(contact* p)
 
 void menu()
 {
-	printf("欢迎使用通讯录系统V2.0!!!\n");
+	printf("欢迎使用通讯录系统V3.0!!!\n");
 	printf("*************************\n");
 	printf("****1.查找     2.全显****\n");
 	printf("****3.增加     4.删除****\n");
 	printf("****5.修改     0.退出****\n");
 	printf("请选择:>");
+}
+void saveCon(contact* p)
+{
+	FILE* pf = fopen("contact.dat","wb");
+	if(!pf)
+	{
+		perror("saveCon");
+		return;
+	}
+	for(int i=0;i<p->size;i++)
+	{
+		fwrite(&(p->data[i]),sizeof(peoInfo),1,pf);
+	}
+	fclose(pf);
+	pf=NULL;
+}
+void loadCon(contact *p)
+{
+	FILE* pf = fopen("contact.dat","rb");
+	if(!pf)
+	{
+		perror("loadCon");
+		return;
+	}
+	peoInfo tmp={0};
+	while(fread(&tmp,sizeof(peoInfo),1,pf))
+	{
+		checkCapasity(p);
+		p->data[p->size]=tmp;
+		p->size++;
+	}
+	fclose(pf);
+	pf=NULL;
+}
+
+int login()
+{
+	printf("请输入密码:>");
+	char pwd[100]="";;
+	scanf("%s",pwd);
+	char True[] = "139qsccsq";
+	if(strcmp(pwd,True)==0)
+		return 1;
+	else 
+		return 0;
 }
 
 
@@ -209,6 +258,12 @@ int main()
 	int input=0;
 	contact con;
 	init(&con);
+	loadCon(&con);
+	if(!login())
+	{
+		printf("密码错误！\n");
+		return 0;
+	}
 	do
 	{
 		menu();
@@ -231,6 +286,7 @@ int main()
 				change(&con);
 				break;
 			case 0:
+				saveCon(&con);
 				free(con.data);
 				con.data=NULL;
 				printf("退出系统\n");

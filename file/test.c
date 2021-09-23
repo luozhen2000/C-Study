@@ -31,6 +31,8 @@ int main()
 	//将文件的相关信息，如大小，类型等，保存在一个结构体中，结构体就是FILE，创建了一个文件指针变量
 	//fwrite(&a,4,1,pf);
 	//写 1 个 4 字节 的数据 &a 入 pf 中
+	//fread(&a,4,1,pf);
+	//从pf中读 1 个 4 字节 的数据 存入 a 中
 	fputc('A',pf);
 	fputc('s',pf);
 	fputc('h',pf);
